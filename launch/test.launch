@@ -1,0 +1,7 @@
+<launch>
+  <node name="pose_filter" pkg="exploration" type="gt_pose_filter.py" />
+  <node name="planner" pkg="exploration" type="dummy_planner.py" />
+  <group ns="robot_00" />
+    <node name="pose_controller" pkg="exploration" type="pose_controller.py" />
+  </group>
+</launch>
