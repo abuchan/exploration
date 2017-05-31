@@ -1,0 +1,18 @@
+<launch>
+  <node name='turtlesim' pkg='turtlesim' type='turtlesim_node' />
+
+  <node name='random_planner' pkg='exploration' type='random_planner.py' args='1' output='screen' />
+
+  <group ns='robot_00'>
+    <node name='bridge' pkg='exploration' type='turtlesim_to_odometry_tf.py' output='screen' args='robot_00 2.5 2.5 0.0' />
+    <node name='pose_controller' pkg='exploration' type='pose_controller.py' output='screen'/>
+  </group>
+  <group ns='robot_01'>
+    <node name='bridge' pkg='exploration' type='turtlesim_to_odometry_tf.py' output='screen' args='robot_01 7.5 7.5 0.0' />
+    <node name='pose_controller' pkg='exploration' type='pose_controller.py'/>
+  </group>
+  <group ns='robot_02'>
+    <node name='bridge' pkg='exploration' type='turtlesim_to_odometry_tf.py' output='screen' args='robot_02 2.5 7.5 0.0' />
+    <node name='pose_controller' pkg='exploration' type='pose_controller.py'/>
+  </group>
+</launch>

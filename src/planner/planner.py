@@ -7,7 +7,7 @@ from exploration.srv import AddGoal
 
 from tf.transformations import *
 
-class Planner:
+class Planner(object):
   def __init__(self, node_name='planner', n_robots=1):
     rospy.init_node(node_name)
     self.rate = rospy.Rate(1)
@@ -32,7 +32,7 @@ class Planner:
     self.odoms[robot_idx] = msg
 
   def ctrl_state_callback(self, msg, robot_idx):
-    self.states[robot_idx] = msg
+    self.states[robot_idx] = msg.data
 
   def robot_clear_goals(self, robot_idx):
     return self.clear_goals_svcs[robot_idx](TriggerRequest())
@@ -59,4 +59,4 @@ class Planner:
 
   def run(self):
     while not rospy.is_shutdown():
-      rate.sleep()
+      self.rate.sleep()
