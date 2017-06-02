@@ -96,12 +96,11 @@ class Controller(object):
       self.goal = self.new_goal
       self.new_goal = None
       self.progress = 0.0
-      self.status = 'idle'
-      self.active = None 
-      
-    if self.status == 'idle':
-      if self.active and self.goal is not None and self.goal_len() is not 0:
-        next_status = 'active'
+      self.active = False 
+      next_status = 'idle'
+    
+    elif self.status == 'idle' and self.active and self.goal_len() > 0:
+      next_status = 'active'
 
     elif self.status == 'active':
       if self.progress == self.goal_len():

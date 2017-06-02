@@ -53,6 +53,8 @@ add_message_files(
   ScanPoint.msg
   ScanPath.msg
   ScanDelta.msg
+  MarkerPath.msg
+  MarkerState.msg
 )
 
 ## Generate services in the 'srv' folder
