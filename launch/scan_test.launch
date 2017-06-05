@@ -1,0 +1,8 @@
+<launch>
+
+  <group ns='/robot_00/scanner_0'>
+    <node name='scan_controller' pkg='exploration' type='scan_controller.py' />
+    <node name='scan_planner' pkg='exploration' type='scan_planner.py' />
+  </group>
+
+</launch>
