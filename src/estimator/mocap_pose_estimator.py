@@ -33,8 +33,8 @@ class MocapPoseEstimator():
     self.robot_frame = rospy.get_namespace().strip('/') + '_mocap'
     self.state_estimate_pub = rospy.Publisher('state_estimate',Odometry,queue_size=1)
     self.last_state_estimate = None
-    self.pose_covariance = (0.001 * numpy.eye(6)).reshape(-1)
-    self.twist_covariance = (0.01 * numpy.eye(6)).reshape(-1)
+    self.pose_covariance = numpy.diag([0.001,0.001,0.001,0.01,0.01,0.01]).reshape(-1)
+    self.twist_covariance = numpy.diag([0.01,0.01,0.01,0.1,0.1,0.1]).reshape(-1)
 
   def run(self):
     rate = rospy.Rate(10.0)

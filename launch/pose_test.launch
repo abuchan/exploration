@@ -1,0 +1,7 @@
+<launch>
+  <group ns='/robot_00'>
+    <node name='mocap_pose_estimator' pkg='exploration' type='mocap_pose_estimator.py' />
+    <node name='pose_controller' pkg='exploration' type='pose_controller.py' />
+    <node name='pose_planner' pkg='exploration' type='pose_planner.py' />
+  </group>
+</launch>
