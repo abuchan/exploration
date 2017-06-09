@@ -24,7 +24,11 @@ def quats_to_twist(Q0, Q1):
   if Q0.dot(Q1) < 0.0:  
     q1 *= -1
   dQ = quaternion_multiply(q1, quaternion_inverse(Q0))
-  return 2*numpy.arccos(dQ[3]) / (1-dQ[3]**2)**0.5 * dQ[:3]
+  
+  if dQ[3] in [1.0, -1.0]:
+    return numpy.array([0.0, 0.0, 0.0])
+  else:
+    return 2*numpy.arccos(dQ[3]) / (1-dQ[3]**2)**0.5 * dQ[:3]
 
 class MocapPoseEstimator():
   def __init__(self, node_name='mocap_pose_estimator'):

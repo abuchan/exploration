@@ -126,10 +126,18 @@ class PoseController(Controller):
 
     return next_command
 
-  # Power state is [v, w, z_world * x_robot]
+  # Power state is [v_robot, w_robot, z_world * x_robot]
   def update_power_state(self):
     power_state = numpy.array([0.0, 0.0, 0.0, 1.0])
 
+    if self.state_estimate is not None:
+      H = tf_from_odom(self.state_estimate.pose)
+      V = self.state_estimate.twist.twist.linear
+      W = self.state_estimate.twist.twist.angular
+      vw_world = numpy.array([[V.x, W.x],[V.y,W.y],[V.z,W.z],[0.0,0.0]])
+      vw_robot = numpy.linalg.inv(H).dot(vw_world)
+      power_state = numpy.array([vw_robot[0,0], vw_robot[2,1], H[2,0], 1.0])
+    
     return power_state
 
 if __name__ == '__main__':
