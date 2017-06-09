@@ -72,6 +72,41 @@ def ab_control(pose, goal):
 
   return cmd
 
+def const_vw_control(pose, goal, v = 0.1, w = 0.5):
+  cmd = Twist()
+  
+  H_p = tf_from_odom(pose)
+  H_g = tf_from_odom(goal)
+  H_d = numpy.linalg.inv(H_p).dot(H_g)
+  T = H_d[:3,3]
+  p = T.dot(T)**0.5
+  
+  if abs(H_d[1,0]) > 0.5:
+    theta_sign = abs(H_d[1,0])/H_d[1,0]
+  else:
+    theta_sign = 2*H_d[1,0]
+  
+  if p > 0.01:
+
+    cmd.linear.x = min(v, 1.0*p)
+
+    a = numpy.arctan2(T[1],T[0])
+    R = H_d[:3,:3]
+    d_g = R.T.dot(T)
+    b = -numpy.arctan2(d_g[1], d_g[0])
+    
+    cmd.angular.z = 2 * a - 0.1 * b
+    
+    if cmd.angular.z > w:
+      cmd.angular.z = w
+    if cmd.angular.z < -w:
+      cmd.angular.z = -w
+  
+  else:
+    cmd.angular.z = theta_sign * w
+
+  return cmd
+
 class PoseController(Controller):
   def __init__(self, node_name='pose_controller'):
     super(PoseController, self).__init__(Path, Twist, Odometry, node_name, 3)
@@ -94,6 +129,10 @@ class PoseController(Controller):
 
     if self.state_estimate is not None and subgoal_index < self.goal_len():
       likelihood = pose_likelihood(self.state_estimate.pose, self.goal.poses[subgoal_index])
+      while likelihood < 0.5 and subgoal_index < self.goal_len()-1:
+        subgoal_index += 1
+        self.progress = float(subgoal_index)
+        likelihood = pose_likelihood(self.state_estimate.pose, self.goal.poses[subgoal_index])
       self.likelihood_pub.publish(likelihood)
 
       if self.subgoal_complete():
@@ -105,7 +144,7 @@ class PoseController(Controller):
         subgoal_progress = 0.001
 
       # This shouldn't be possible, but in case of floating point error
-      if subgoal_progress > 0.99:
+      if likelihood < 0.5 or subgoal_progress > 1.0:
         subgoal_progress = 1.0
 
       next_progress = subgoal_index + subgoal_progress
@@ -122,7 +161,8 @@ class PoseController(Controller):
     subgoal_index = int(self.progress)
 
     if self.active and self.state_estimate is not None and subgoal_index < self.goal_len():
-      next_command = ab_control(self.state_estimate.pose, self.goal.poses[subgoal_index])
+      #next_command = ab_control(self.state_estimate.pose, self.goal.poses[subgoal_index])
+      next_command = const_vw_control(self.state_estimate.pose, self.goal.poses[subgoal_index])
 
     return next_command
 
