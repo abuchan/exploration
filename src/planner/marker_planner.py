@@ -17,6 +17,11 @@ PIXELS_SPECTRUM = [COLOR_RED, COLOR_YELLOW, COLOR_GREEN, COLOR_CYAN, COLOR_BLUE,
 PIXELS_BLACK    = 6*[COLOR_BLACK]
 PIXELS_WHITE    = 6*[COLOR_WHITE]
 
+def states_to_path(self, pixel_states=[PIXELS_SPECTRUM], stamp=None):
+  marker_path = empty_stamped_path(MarkerPath,stamp)
+  marker_path.states = [MarkerState(reduce(list.__add__,state)) for state in pixel_states]
+  return marker_path
+
 class MarkerPlanner(Planner):
   def __init__(self, node_name='marker_planner'):
     super(MarkerPlanner, self).__init__(MarkerPath, node_name)

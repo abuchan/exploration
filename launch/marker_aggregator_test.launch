@@ -1,0 +1,19 @@
+<launch>
+  
+  <node name='active_pub' pkg='rostopic' type='rostopic' args='pub -r 10 /active std_msgs/Bool "data: true"' />
+
+  <node name='marker_aggregator' pkg='exploration' type='marker_aggregator.py' args="0.0 1.0" output="screen" />
+
+  <group ns='/robot_00/markers_0'>
+    <node name='marker_controller' pkg='exploration' type='marker_controller.py' />
+    <node name='marker_planner' pkg='exploration' type='marker_planner.py' />
+  </group>
+
+  <group ns='/robot_01/markers_0'>
+    <node name='marker_controller' pkg='exploration' type='marker_controller.py' />
+    <node name='marker_planner' pkg='exploration' type='marker_planner.py' />
+  </group>
+
+  <rosparam command="load" file="$(find bml_vrep)/param/2r_1i_1m_1c_1s_surface.yml" />
+
+</launch>

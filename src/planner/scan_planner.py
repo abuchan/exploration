@@ -23,6 +23,18 @@ def region_path(region, step=0.1):
   xmax,ymax = region.max(axis=0)
   return grid_path([xmin,ymin,xmax,ymax],step)
 
+def path_to_scan(self, points, stamp=None):
+  scan_path = empty_stamped_path(ScanPath,stamp)
+
+  scan_index = 0
+  for p in points:
+    scan_path.points.append(ScanPoint(scan_index, Vector3(p[0],p[1],0.0)))
+    scan_path.points.append(ScanPoint(scan_index+1, Vector3(p[0],p[1],1.0)))
+    scan_index += 2
+  scan_path.points.append(ScanPoint(scan_index, Vector3(p[0],p[1],0.0)))
+
+  return scan_path
+
 class ScanPlanner(Planner):
   def __init__(self, node_name = 'scan_planner'):
     super(ScanPlanner, self).__init__(ScanPath, node_name)
@@ -54,5 +66,4 @@ class ScanPlanner(Planner):
 if __name__ == '__main__':
   sp = ScanPlanner()
   sp.region_demo()
-
 

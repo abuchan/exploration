@@ -16,25 +16,39 @@ SQUARE_POINTS = [
   (0.0,1.0,4.0),
   (0.0,0.0,0.0),
 ]
-  
+
+def elaborate_path(points):
+  elaborated_points = []
+  for P0, P1 in zip(points[:-1], points[1:]):
+    path_theta = numpy.arctan2(P1[1]-P0[1],P1[0]-P0[0])
+    PA = (P0[0], P0[1], path_theta)
+    PB = (P1[0], P1[1], path_theta)
+    elaborated_points.extend([P0,PA,PB,P1])
+  return elaborated_points
+
+def points_to_path(points, stamp=None):
+  pose_path = empty_stamped_path(Path,stamp)
+
+  for x,y,theta in elaborate_path(points):
+    pose_path.poses.append(
+      PoseStamped(
+        Header(),
+        Pose(
+          Point(x,y,0.0),
+          Quaternion(*quaternion_about_axis(theta,(0,0,1)))
+    )))
+
+  return pose_path
+
 class PosePlanner(Planner):
   def __init__(self, node_name = 'pose_planner'):
     super(PosePlanner, self).__init__(Path, node_name)
     self.status = 'idle'
 
-  def elaborate_path(self, points):
-    elaborated_points = []
-    for P0, P1 in zip(points[:-1], points[1:]):
-      path_theta = numpy.arctan2(P1[1]-P0[1],P1[0]-P0[0])
-      PA = (P0[0], P0[1], path_theta)
-      PB = (P1[0], P1[1], path_theta)
-      elaborated_points.extend([P0,PA,PB,P1])
-    return elaborated_points
-
   def execute_path(self, points, stamp=None):
     pose_path = self.empty_stamped_path(stamp)
 
-    for x,y,theta in self.elaborate_path(points):
+    for x,y,theta in elaborate_path(points):
       pose_path.poses.append(
         PoseStamped(
           Header(),

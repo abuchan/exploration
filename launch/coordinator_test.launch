@@ -1,0 +1,18 @@
+<launch>
+  <!--node name='active_publisher' pkg='rostopic' type='rostopic' args='pub -r 1 /active std_msgs/Bool "data: true"' /-->
+
+  <group ns='robot_00'>
+    <node name='mocap_pose_estimator' pkg='exploration' type='mocap_pose_estimator.py' />
+    <node name='pose_controller' pkg='exploration' type='pose_controller.py' />
+    <node name='pose_planner' pkg='exploration' type='pose_planner.py' />
+    <group ns='markers_0'>
+      <node name='marker_controller' pkg='exploration' type='marker_controller.py' />
+      <node name='marker_planner' pkg='exploration' type='marker_planner.py' />
+    </group>
+    <group ns='scanner_0'>
+      <node name='scan_controller' pkg='exploration' type='scan_controller.py' />
+      <node name='scan_planner' pkg='exploration' type='scan_planner.py' />
+    </group>
+  </group>
+
+</launch>

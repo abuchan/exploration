@@ -2,6 +2,17 @@ import rospy
 
 from std_msgs.msg import Bool
 
+def empty_stamped_path(PathType, stamp=None):
+  path = PathType()
+
+  if stamp is None:
+    stamp = rospy.Time.now()
+  elif type(stamp) is float:
+    stamp = rospy.Time(stamp)
+  path.header.stamp = stamp
+
+  return path
+
 class Planner(object):
   def __init__(self, PathType, node_name='planner'):
     rospy.init_node(node_name)

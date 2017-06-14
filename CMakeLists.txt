@@ -55,6 +55,10 @@ add_message_files(
   ScanDelta.msg
   MarkerPath.msg
   MarkerState.msg
+  MarkerAggregate.msg
+  MarkerStateStamped.msg
+  MarkerPositionState.msg
+  TwistAggregate.msg
 )
 
 ## Generate services in the 'srv' folder

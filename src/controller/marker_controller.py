@@ -12,6 +12,7 @@ class MarkerController(Controller):
 
     self.state_estimate = MarkerState()
     self.power_matrix = numpy.array([[1.0, 0.0],[0.0, 0.0]])
+    self.state_estimate_pub = rospy.Publisher('state_estimate', MarkerState, queue_size=1)
 
   def goal_len(self):
     if self.goal is not None:
@@ -32,7 +33,8 @@ class MarkerController(Controller):
 
     if self.active and not self.subgoal_complete():
       next_command = self.goal.states[int(self.progress)]
-      self.state_estimate = next_command
+      #self.state_estimate = next_command
+      self.state_estimate_pub.publish(next_command)
       self.progress = numpy.ceil(self.progress)
     
     return next_command
