@@ -15,7 +15,7 @@ class MarkerAggregator(Aggregator):
     if marker_topics is None:
       marker_topics = []
     
-    super(MarkerAggregator, self).__init__(node_name, MarkerAggregate, '/active_markers', MarkerState, marker_topics, 20.0)
+    super(MarkerAggregator, self).__init__(node_name, MarkerAggregate, '/active_markers', MarkerState, marker_topics)
     
     self.configs = {mt: None for mt in marker_topics}
 
@@ -50,7 +50,6 @@ class MarkerAggregator(Aggregator):
     )
 
 if __name__ == '__main__':
-  print 'TEST'
   mt_refs = filter(lambda s: len(s) == 3, sys.argv)
   mt_refs = [tuple([int(r) for r in ref.split('.')]) for ref in mt_refs]
   mt = ['/robot_%02d/markers_%01d/state_estimate' % ref for ref in mt_refs]

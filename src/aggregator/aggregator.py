@@ -12,7 +12,7 @@ def get_params_from_topic(topic):
   return child_params
 
 class Aggregator(object):
-  def __init__(self, node_name, AggregateType, aggregate_topic, IndividualType, individual_topics, rate=10.0):
+  def __init__(self, node_name, AggregateType, aggregate_topic, IndividualType, individual_topics, rate=30.0):
     rospy.init_node(node_name)
     self.AggregateType = AggregateType
     self.IndividualType = IndividualType
@@ -48,8 +48,11 @@ class Aggregator(object):
     while not rospy.is_shutdown():
       self.lock.acquire()
       active_states = filter(self.is_active, self.individual_states.values())
+      self.individual_states = {topic:None for topic in self.individual_states.keys()}
       self.lock.release()
 
-      aggregate = self.AggregateType(active_states)
-      self.aggregate_pub.publish(aggregate)
+      if len(active_states):
+        aggregate = self.AggregateType(active_states)
+        self.aggregate_pub.publish(aggregate)
+
       self.rate.sleep()

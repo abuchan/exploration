@@ -21,6 +21,8 @@ class ScanController(Controller):
     self.power_matrix = numpy.eye(3)
     self.power_matrix[-1,-1] = 0
 
+    self.state_estimate_pub = rospy.Publisher('state_estimate', ScanPoint, queue_size=1)
+
   def goal_len(self):
     if self.goal is not None:
       return len(self.goal.points)
@@ -50,7 +52,7 @@ class ScanController(Controller):
 
       # Update open-loop state estimate
       if self.progress != 0.0:
-        self.state_estimate = self.goal.points[subgoal_index-1]
+        self.state_estimate_pub.publish(self.goal.points[subgoal_index-1])
       
       # If there are more subgoals, and there is not a new goal update waiting,
       # start progress towards next subgoal

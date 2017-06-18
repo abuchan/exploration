@@ -53,6 +53,7 @@ add_message_files(
   ScanPoint.msg
   ScanPath.msg
   ScanDelta.msg
+  ScanAggregate.msg
   MarkerPath.msg
   MarkerState.msg
   MarkerAggregate.msg
