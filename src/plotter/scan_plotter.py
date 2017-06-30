@@ -9,7 +9,7 @@ PI3 = numpy.pi/3.0
 
 ROBOT_R = 0.1
 FOV_R = 2.5
-FOV_ANGLE = 3*PI2
+FOV_ANGLE = PI2
 
 trajectory = [
   [
@@ -30,6 +30,24 @@ trajectory = [
   ],[
     [2.0, 0.0,  PI2, 0.0],
     [3.0, 2.0, -PI2, 0.0],
+  ],[
+    [2.0, 0.0,  0.0, 1.0],
+    [3.0, 2.0, -PI2, 1.0],
+  ],[
+    [4.0, 0.0,  0.0, 0.0],
+    [3.0, 2.0, -PI2, 0.0],
+  ],[
+    [4.0, 0.0,  PI2, 0.0],
+    [3.0, 2.0, -PI2, 0.0],
+  ],[
+    [4.0, 0.0,  PI2, 1.0],
+    [3.0, 2.0,  0.0, 1.0],
+  ],[
+    [4.0, 0.0,  PI2, 0.0],
+    [5.0, 2.0,  0.0, 0.0],
+  ],[
+    [4.0, 0.0,  PI2, 0.0],
+    [5.0, 2.0, -PI2, 0.0],
   ]
 ]
 
@@ -57,11 +75,8 @@ def plot_trajectory(traj=None, ax=None):
   n_r = 3
   n_c = (len(traj)+2)/n_r
   
-  print n_r, n_c
-
   for c in range(n_c):
     for r in range(n_r):
-      print r,c,n_c*r+c,n_r*c+r+1
       plt.subplot(n_r, n_c, n_c*r+c+1)
       scan_geoms.extend(plot_scene(traj[n_r*c+r]['poses'],scan_geoms))
   
@@ -96,6 +111,7 @@ def plot_scene(poses=None, scan_geoms=None, ax=None):
     new_scan_geom = new_scan_fovs[0]
     for new_scan_fov in new_scan_fovs[1:]:
       new_scan_geom = new_scan_geom.intersection(new_scan_fov)
+
     return [new_scan_geom]
   else:
     return []

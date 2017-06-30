@@ -33,7 +33,14 @@ class MarkerPlanner(Planner):
 
   def set_markers(self, pixel_states=[PIXELS_SPECTRUM], stamp=None):
     self.goal_pub.publish(self.states_to_path(pixel_states,stamp))
-    
+  
+  def blink_demo(self):
+    rate = rospy.Rate(0.5)
+    blink = 10 * [PIXELS_SPECTRUM] + 8 * [PIXELS_BLACK]
+    while not rospy.is_shutdown():
+      self.set_markers(blink)
+      rate.sleep()
+
   def spectrum_demo(self):
     rotation = []
     for i in range(6):
@@ -46,4 +53,4 @@ class MarkerPlanner(Planner):
 
 if __name__ == '__main__':
   mp = MarkerPlanner()
-  mp.spectrum_demo()
+  mp.blink_demo()
