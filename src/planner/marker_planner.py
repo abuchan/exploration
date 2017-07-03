@@ -4,12 +4,13 @@ import rospy
 from planner import *
 from exploration.msg import MarkerPath, MarkerState
 
+#Colors in BGR order (i.e. color[0] = B)
 COLOR_BLACK   = [   0,   0,   0]
-COLOR_RED     = [ 255,   0,   0]
-COLOR_YELLOW  = [ 255, 255,   0]
+COLOR_RED     = [   0,   0, 255]
+COLOR_YELLOW  = [   0, 255, 255]
 COLOR_GREEN   = [   0, 255,   0]
-COLOR_CYAN    = [   0, 255, 255]
-COLOR_BLUE    = [   0,   0, 255]
+COLOR_CYAN    = [ 255, 255,   0]
+COLOR_BLUE    = [ 255,   0,   0]
 COLOR_MAGENTA = [ 255,   0, 255]
 COLOR_WHITE   = [ 255, 255, 255]
 
