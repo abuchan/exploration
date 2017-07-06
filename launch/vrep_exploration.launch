@@ -1,0 +1,22 @@
+<launch>
+  <include file="$(find exploration)/launch/joystick_control.launch" />
+  <include file="$(find bml_vrep)/launch/3r_1i_1m_1c_1s_wall.launch" />
+
+  <node name='active_pub' pkg='rostopic' type='rostopic' args='pub -r 10 /active std_msgs/Bool "data: true"' />
+  <node name='marker_aggregator' pkg='exploration' type='marker_aggregator.py' args="0.0 1.0 2.0"/>
+
+  <group ns="robot_01">
+    <group ns="markers_0">
+      <node name="marker_controller" pkg="exploration" type="marker_controller.py" />
+      <node name="marker_planner" pkg="exploration" type="marker_planner.py" />
+    </group>
+  </group>
+
+  <group ns="robot_02">
+    <group ns="markers_0">
+      <node name="marker_controller" pkg="exploration" type="marker_controller.py" />
+      <node name="marker_planner" pkg="exploration" type="marker_planner.py" />
+    </group>
+  </group>
+
+</launch>

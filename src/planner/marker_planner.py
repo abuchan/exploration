@@ -51,7 +51,13 @@ class MarkerPlanner(Planner):
     while not rospy.is_shutdown():
       self.set_markers(rotation)
       rate.sleep()
+  
+  def on_demo(self):
+    rate = rospy.Rate(1.0)
+    while not rospy.is_shutdown():
+      self.set_markers([PIXELS_SPECTRUM])
+      rate.sleep()
 
 if __name__ == '__main__':
   mp = MarkerPlanner()
-  mp.blink_demo()
+  mp.on_demo()

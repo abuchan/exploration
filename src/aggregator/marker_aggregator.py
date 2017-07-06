@@ -15,7 +15,7 @@ class MarkerAggregator(Aggregator):
     if marker_topics is None:
       marker_topics = []
     
-    super(MarkerAggregator, self).__init__(node_name, MarkerAggregate, '/active_markers', MarkerState, marker_topics)
+    super(MarkerAggregator, self).__init__(node_name, MarkerAggregate, '/active_markers', MarkerState, marker_topics, rate=1.0)
     
     self.configs = {mt: None for mt in marker_topics}
 

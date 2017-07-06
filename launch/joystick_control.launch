@@ -1,0 +1,7 @@
+<launch>
+  <remap from="robot0/cmd_vel" to="robot_00/command" />
+  <remap from="robot1/cmd_vel" to="robot_01/command" />
+  <remap from="robot2/cmd_vel" to="robot_02/command" />
+  <node pkg="man_joy_override" name="man_joy" type="mjo.py" />
+  <node pkg="joy" name="joystick" type="joy_node" />
+</launch>
