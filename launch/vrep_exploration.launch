@@ -10,10 +10,17 @@
     <group ns="camera_0">
       <include file="$(find monocular_pose_estimator)/launch/factored.launch" />
     </group>
+    <group ns="markers_0">
+      <node name="marker_controller" pkg="exploration" type="marker_controller.py" />
+      <node name="marker_planner" pkg="exploration" type="marker_planner.py" />
+    </group>
   </group>
 
   <group ns="robot_01">
     <node name="add_moving_imu" pkg="coop_loc" type="add_moving_imu.py" />
+    <group ns="camera_0">
+      <include file="$(find monocular_pose_estimator)/launch/factored.launch" />
+    </group>
     <group ns="markers_0">
       <node name="marker_controller" pkg="exploration" type="marker_controller.py" />
       <node name="marker_planner" pkg="exploration" type="marker_planner.py" />
@@ -22,6 +29,9 @@
 
   <group ns="robot_02">
     <node name="add_moving_imu" pkg="coop_loc" type="add_moving_imu.py" />
+    <group ns="camera_0">
+      <include file="$(find monocular_pose_estimator)/launch/factored.launch" />
+    </group>
     <group ns="markers_0">
       <node name="marker_controller" pkg="exploration" type="marker_controller.py" />
       <node name="marker_planner" pkg="exploration" type="marker_planner.py" />
