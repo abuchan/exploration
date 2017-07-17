@@ -1,6 +1,8 @@
 #!/usr/bin/python
 
 import rospy
+from std_srvs.srv import Trigger, TriggerResponse
+
 from planner import *
 from exploration.msg import MarkerPath, MarkerState
 
@@ -26,7 +28,17 @@ def states_to_path(self, pixel_states=[PIXELS_SPECTRUM], stamp=None):
 class MarkerPlanner(Planner):
   def __init__(self, node_name='marker_planner'):
     super(MarkerPlanner, self).__init__(MarkerPath, node_name)
+    rospy.Service('markers_on', Trigger, self.markers_on)
+    rospy.Service('markers_off', Trigger, self.markers_off)
 
+  def markers_on(self, req):
+    self.set_markers([PIXELS_SPECTRUM])
+    return TriggerResponse()
+
+  def markers_off(self, req):
+    self.set_markers([PIXELS_BLACK])
+    return TriggerResponse()
+  
   def states_to_path(self, pixel_states=[PIXELS_SPECTRUM], stamp=None):
     marker_path = self.empty_stamped_path(stamp)
     marker_path.states = [MarkerState(reduce(list.__add__,state)) for state in pixel_states]
@@ -60,4 +72,7 @@ class MarkerPlanner(Planner):
 
 if __name__ == '__main__':
   mp = MarkerPlanner()
-  mp.on_demo()
+  rate = rospy.Rate(10.0)
+  while not rospy.is_shutdown():
+    rate.sleep()
+  #mp.on_demo()

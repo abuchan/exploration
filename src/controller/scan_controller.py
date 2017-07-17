@@ -6,7 +6,7 @@ from geometry_msgs.msg import Vector3
 
 # Delay (in seconds) must be long enough to guarantee move is done, and image 
 # is acquired from all scanners
-DWELL_DELAY = 0.05
+DWELL_DELAY = 0.1
 PROGRESS_EPSILON = 0.001
 
 class ScanController(Controller):
@@ -23,6 +23,9 @@ class ScanController(Controller):
 
     self.state_estimate_pub = rospy.Publisher('state_estimate', ScanPoint, queue_size=1)
 
+    # This is part of the hack to get vrep working
+    self.pos_pub = rospy.Publisher('position', ScanDelta, queue_size=1)
+
   def goal_len(self):
     if self.goal is not None:
       return len(self.goal.points)
@@ -36,6 +39,15 @@ class ScanController(Controller):
   def subgoal_state_to_delta(self):
     subgoal_idx = int(self.progress)
     subgoal_point = self.goal.points[subgoal_idx].point
+    
+    # This is a hack to get the vrep simulation to play nice
+    subgoal_delta = ScanDelta(
+      subgoal_idx, Vector3(
+        subgoal_point.x, subgoal_point.y, subgoal_point.z
+      )
+    )
+    self.pos_pub.publish(subgoal_delta)
+
     state_point = self.state_estimate.point
     delta = numpy.array([
       subgoal_point.x - state_point.x, subgoal_point.y - state_point.y
@@ -84,7 +96,8 @@ class ScanController(Controller):
       next_command = self.subgoal_state_to_delta()
       self.last_laser = next_command.delta.z
     
-    return next_command
+    #return next_command
+    return None
   
   def update_power_state(self):
     power_state = numpy.array([0.0,0.0,1.0])

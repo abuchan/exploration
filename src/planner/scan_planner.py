@@ -1,8 +1,11 @@
 #!/usr/bin/python
 
 import rospy
+from std_srvs.srv import Trigger, TriggerResponse
+
 from planner import *
 from exploration.msg import ScanPath, ScanPoint
+from exploration.srv import ScanRegion, ScanRegionRequest, ScanRegionResponse
 from std_msgs.msg import Bool
 from geometry_msgs.msg import Vector3
 
@@ -38,6 +41,11 @@ def path_to_scan(self, points, stamp=None):
 class ScanPlanner(Planner):
   def __init__(self, node_name = 'scan_planner'):
     super(ScanPlanner, self).__init__(ScanPath, node_name)
+    rospy.Service('do_scan', ScanRegion, self.do_scan)
+  
+  def do_scan(self, req):
+    self.scan_region([(req.xmin,req.ymin),(req.xmax,req.ymax)],req.step)  
+    return ScanRegionResponse()
 
   def path_to_scan(self, points, stamp=None):
     scan_path = self.empty_stamped_path(stamp)
@@ -65,5 +73,9 @@ class ScanPlanner(Planner):
 
 if __name__ == '__main__':
   sp = ScanPlanner()
-  sp.region_demo()
+  rate = rospy.Rate(10.0)
+  while not rospy.is_shutdown():
+    rate.sleep()
+
+  #sp.region_demo()
 
