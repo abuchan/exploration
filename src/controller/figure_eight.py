@@ -142,10 +142,12 @@ def lemniscate_control(s, t, v=0.1, w=0.5):
   theta_diff = (theta_vf - theta) % (2*numpy.pi)
   if theta_diff > numpy.pi:
     theta_diff -= 2*numpy.pi
+  
+  v_t = 0.6 + 0.4*numpy.cos(t) * v
 
   v_cmd = threshold_gain(
     (sum(vector**2)**0.5)*numpy.cos(theta_diff),
-    gain=v,bounds=[0.0,2*v]
+    gain=v_t,bounds=[0.0,2*v_t]
   )
   
   a_cmd = threshold_gain(theta_diff,gain=50.0,bounds=[-3.0,3.0])
