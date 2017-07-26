@@ -39,9 +39,9 @@ def path_to_scan(self, points, stamp=None):
   return scan_path
 
 class ScanPlanner(Planner):
-  def __init__(self, node_name = 'scan_planner'):
-    super(ScanPlanner, self).__init__(ScanPath, node_name)
-    rospy.Service('do_scan', ScanRegion, self.do_scan)
+  def __init__(self, node_name = 'scan_planner', robot_name=''):
+    super(ScanPlanner, self).__init__(ScanPath, node_name, robot_name)
+    rospy.Service(robot_name+'do_scan', ScanRegion, self.do_scan)
   
   def do_scan(self, req):
     self.scan_region([(req.xmin,req.ymin),(req.xmax,req.ymax)],req.step)  

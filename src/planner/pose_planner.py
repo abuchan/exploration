@@ -41,8 +41,8 @@ def points_to_path(points, stamp=None):
   return pose_path
 
 class PosePlanner(Planner):
-  def __init__(self, node_name = 'pose_planner'):
-    super(PosePlanner, self).__init__(Path, node_name)
+  def __init__(self, node_name = 'pose_planner', robot_name=''):
+    super(PosePlanner, self).__init__(Path, node_name, robot_name)
     self.status = 'idle'
 
   def execute_path(self, points, stamp=None):

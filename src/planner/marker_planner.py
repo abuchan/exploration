@@ -26,10 +26,10 @@ def states_to_path(self, pixel_states=[PIXELS_SPECTRUM], stamp=None):
   return marker_path
 
 class MarkerPlanner(Planner):
-  def __init__(self, node_name='marker_planner'):
-    super(MarkerPlanner, self).__init__(MarkerPath, node_name)
-    rospy.Service('markers_on', Trigger, self.markers_on)
-    rospy.Service('markers_off', Trigger, self.markers_off)
+  def __init__(self, node_name='marker_planner', robot_name=''):
+    super(MarkerPlanner, self).__init__(MarkerPath, node_name, robot_name)
+    rospy.Service(robot_name+'markers_on', Trigger, self.markers_on)
+    rospy.Service(robot_name+'markers_off', Trigger, self.markers_off)
 
   def markers_on(self, req):
     self.set_markers([PIXELS_SPECTRUM])
