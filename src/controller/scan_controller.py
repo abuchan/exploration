@@ -8,6 +8,11 @@ from geometry_msgs.msg import Vector3
 # is acquired from all scanners
 DWELL_DELAY = 0.1
 PROGRESS_EPSILON = 0.001
+SCAN_POWER_MATRIX = numpy.array([
+  [   0.0,   0.0, 0.250],
+  [   0.0,   0.0, 0.025],
+  [ 0.250, 0.025,   0.0]
+])
 
 class ScanController(Controller):
   def __init__(self, node_name='scan_controller'):
@@ -18,7 +23,7 @@ class ScanController(Controller):
     self.last_laser = 0.0
     self.state_estimate = ScanPoint(-1,Vector3())
     self.galvo_done_progress = -1.0
-    self.power_matrix = numpy.eye(3)
+    self.power_matrix = SCAN_POWER_MATRIX
     self.power_matrix[-1,-1] = 0
 
     self.state_estimate_pub = rospy.Publisher('state_estimate', ScanPoint, queue_size=1)

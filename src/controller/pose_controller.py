@@ -107,11 +107,18 @@ def const_vw_control(pose, goal, v = 0.1, w = 0.5):
 
   return cmd
 
+ROBOT_POWER_MATRIX = numpy.array([
+  [14.0,   0.0, 1.68,  0.0],
+  [ 0.0, 0.035,  0.0,  0.0],
+  [1.68,   0.0,  0.0,  0.0],
+  [ 0.0,   0.0,  0.0, 7.56]
+])
+
 class PoseController(Controller):
   def __init__(self, node_name='pose_controller'):
     super(PoseController, self).__init__(Path, Twist, Odometry, node_name, 3)
 
-    self.power_matrix = numpy.eye(4)
+    self.power_matrix = ROBOT_POWER_MATRIX
     self.subgoal_distance = 0
     self.likelihood_pub = rospy.Publisher('likelihood', Float64, queue_size=1)
     self.state_estimate = None
@@ -144,7 +151,7 @@ class PoseController(Controller):
         subgoal_progress = 0.001
 
       # This shouldn't be possible, but in case of floating point error
-      if likelihood < 0.5 or subgoal_progress > 1.0:
+      if likelihood < 0.1 or subgoal_progress > 1.0:
         subgoal_progress = 1.0
 
       next_progress = subgoal_index + subgoal_progress

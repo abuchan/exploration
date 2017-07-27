@@ -5,13 +5,17 @@ from controller import *
 from exploration.msg import MarkerPath, MarkerState
 
 PROGRESS_EPSILON = 0.01
+MARKER_POWER_MATRIX = numpy.array([
+  [    0.0, 0.0002],
+  [ 0.0002,    0.0]
+])
 
 class MarkerController(Controller):
   def __init__(self, node_name='marker_controller'):
     super(MarkerController, self).__init__(MarkerPath, MarkerState, MarkerState, node_name, 1, 0.1)
 
     self.state_estimate = MarkerState()
-    self.power_matrix = numpy.array([[1.0, 0.0],[0.0, 0.0]])
+    self.power_matrix = MARKER_POWER_MATRIX
     self.state_estimate_pub = rospy.Publisher('state_estimate', MarkerState, queue_size=1)
 
   def goal_len(self):

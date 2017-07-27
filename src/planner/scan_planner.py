@@ -26,7 +26,7 @@ def region_path(region, step=0.1):
   xmax,ymax = region.max(axis=0)
   return grid_path([xmin,ymin,xmax,ymax],step)
 
-def path_to_scan(self, points, stamp=None):
+def path_to_scan(points, stamp=None):
   scan_path = empty_stamped_path(ScanPath,stamp)
 
   scan_index = 0
