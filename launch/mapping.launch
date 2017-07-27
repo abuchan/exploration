@@ -1,7 +1,7 @@
 <launch>
   <!--include file="$(find exploration)/launch/joystick_control.launch" /-->
   <include file="$(find bml_vrep)/launch/mapping.launch" />
-  
+
   <node name='active_pub' pkg='rostopic' type='rostopic' args='pub -r 10 /active std_msgs/Bool "data: true"' />
   <node name='marker_aggregator' pkg='exploration' type='marker_aggregator.py' args="0.0 1.0"/>
 

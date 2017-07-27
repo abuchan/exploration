@@ -44,9 +44,9 @@ class MapPlanner():
     rp.goal_blocking(points_to_path([self.robots[r]['last_point'],point]))
     self.robots[r]['last_point'] = point
 
-  def scan(self, r=1, region=[(-0.3,-0.4),(0.01,0.41)], step=0.1):
+  def scan(self, r=1, region=[(-0.4,-0.4),(0.06,0.41)], step=0.05, flip=False):
     rs = self.robots[r]['scan']
-    rs.goal_blocking(path_to_scan(region_path(region,step)))
+    rs.goal_blocking(path_to_scan(region_path(region,step), flip=flip))
 
   def mark(self, r, on=True):
     if on:
@@ -55,30 +55,45 @@ class MapPlanner():
       self.robots[r]['marker'].markers_off(None)
 
   def map_trajectory(self):
+    # Initial pose fix
     self.mark(0)
+    rospy.sleep(0)
     self.mark(0,False)
-    
-    self.scan(1)
-    
+    rospy.sleep(0.2)
+
+    # Scan 0.0
+    self.scan(0)
+    rospy.sleep(0.2)
+
+    # move, turn, turn
     self.mark(0)
     self.move(0,(2.0,0.0,PI2+0.05))
     self.mark(0, False)
+    rospy.sleep(0.2)
 
     self.mark(1)
     self.move(1,(1.0,2.0,0.05))
     self.mark(1,False)
-    
+    rospy.sleep(0.2)
+
+    # Scan 1.0
     self.scan(1)
-    
+    rospy.sleep(0.2)
+
+    # move, turn, turn
     self.mark(1)
     self.move(1,(3.0,2.0,-PI2-0.05))
     self.mark(1,False)
-    
+    rospy.sleep(0.2)
+
     self.mark(0)
     self.move(0,(2.0,0.0,-0.05))
     self.mark(0,False)
+    rospy.sleep(0.2)
 
-    self.scan(1)
+    # Scan 0.1
+    self.scan(0,flip=True)
+    rospy.sleep(0.2)
 
 if __name__ == '__main__':
   mp = MapPlanner()

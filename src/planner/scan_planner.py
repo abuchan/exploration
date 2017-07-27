@@ -26,7 +26,7 @@ def region_path(region, step=0.1):
   xmax,ymax = region.max(axis=0)
   return grid_path([xmin,ymin,xmax,ymax],step)
 
-def path_to_scan(points, stamp=None):
+def path_to_scan(points, stamp=None, flip=False):
   scan_path = empty_stamped_path(ScanPath,stamp)
 
   scan_index = 0
@@ -35,6 +35,9 @@ def path_to_scan(points, stamp=None):
     scan_path.points.append(ScanPoint(scan_index+1, Vector3(p[0],p[1],1.0)))
     scan_index += 2
   scan_path.points.append(ScanPoint(scan_index, Vector3(p[0],p[1],0.0)))
+  
+  if flip:
+    scan_path.points.reverse()
 
   return scan_path
 

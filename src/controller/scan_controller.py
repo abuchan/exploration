@@ -16,7 +16,7 @@ SCAN_POWER_MATRIX = numpy.array([
 
 class ScanController(Controller):
   def __init__(self, node_name='scan_controller'):
-    super(ScanController, self).__init__(ScanPath,ScanDelta,ScanPoint,node_name,2)
+    super(ScanController, self).__init__(ScanPath,ScanDelta,ScanPoint,node_name,2,0.05)
     
     # TODO: read galvo matrix from params
     self.galvo_matrix = numpy.eye(2)
