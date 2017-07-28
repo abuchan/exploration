@@ -1,5 +1,5 @@
-power_info.pdf: move_map_power.csv move_map_info.csv ../src/plotter/plot_power_info.py
-	../src/plotter/plot_power_info.py move_map_power.csv move_map_info.csv power_info.pdf
+power_info.pdf: move_map_power.csv move_map_info.csv move_map_clock.csv ../src/plotter/plot_power_info.py
+	../src/plotter/plot_power_info.py move_map_power.csv move_map_info.csv move_map_clock.csv power_info.pdf
 
 move_map_clock.bag: move_map.bag
 	rosbag filter move_map.bag move_map_clock.bag 'topic == "/clock"'
