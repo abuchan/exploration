@@ -1,6 +1,12 @@
 power_info.pdf: move_map_power.csv move_map_info.csv ../src/plotter/plot_power_info.py
 	../src/plotter/plot_power_info.py move_map_power.csv move_map_info.csv power_info.pdf
 
+move_map_clock.bag: move_map.bag
+	rosbag filter move_map.bag move_map_clock.bag 'topic == "/clock"'
+
+move_map_clock.csv: move_map_clock.bag ../src/plotter/bag_to_clock.py
+	../src/plotter/bag_to_clock.py move_map_clock.bag move_map_clock.csv
+
 move_map_power.bag: move_map.bag
 	rosbag filter move_map.bag move_map_power.bag 'topic.find("power") != -1 or topic.find("energy") != -1'
 
