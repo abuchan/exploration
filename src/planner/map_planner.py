@@ -57,7 +57,7 @@ class MapPlanner():
   def map_trajectory(self):
     # Initial pose fix
     self.mark(0)
-    rospy.sleep(0)
+    rospy.sleep(2)
     self.mark(0,False)
     rospy.sleep(0.2)
 
