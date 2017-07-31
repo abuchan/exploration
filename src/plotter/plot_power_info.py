@@ -10,12 +10,16 @@ def interp_power(power, info, clock):
   power_info_interp = numpy.interp(info[:,0],power_shift[:,0],power_shift[:,1])
   return power_info_interp
 
+TIME_LABELS = [
+  [0,'a.']
+]
 def save_power_info(power, info, clock, filename='power_info.pdf'):
   fig = plt.figure(1)
   power_info_interp = interp_power(power, info, clock)
   plt.scatter(power_info_interp, info[:,1], c='k', marker='.')
   plt.xlabel('Energy (J)')
-  plt.ylabel('Info (Robot Volumes)')
+  plt.ylabel('Information Metric (Robot Volume Multiples)')
+  plt.ylim([0,40000])
   plt.grid(True)
   plt.savefig(filename)
 
