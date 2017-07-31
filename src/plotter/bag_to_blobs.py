@@ -58,13 +58,82 @@ def pair_to_point(blob_pair, H_w_r0=H_w_r0_static, H_w_r1=H_w_r1_static):
 
   return x[:3], c0_w, c1_w
 
-def plot_points(pts):
-  fig = plt.figure()
+def set_axes_equal(ax):
+  '''Make axes of 3D plot have equal scale so that spheres appear as spheres,
+  cubes as cubes, etc..  This is one possible solution to Matplotlib's
+  ax.set_aspect('equal') and ax.axis('equal') not working for 3D.
+
+  Input
+    ax: a matplotlib axis, e.g., as output from plt.gca().
+  '''
+
+  x_limits = ax.get_xlim3d()
+  y_limits = ax.get_ylim3d()
+  z_limits = ax.get_zlim3d()
+
+  x_range = abs(x_limits[1] - x_limits[0])
+  x_middle = numpy.mean(x_limits)
+  y_range = abs(y_limits[1] - y_limits[0])
+  y_middle = numpy.mean(y_limits)
+  z_range = abs(z_limits[1] - z_limits[0])
+  z_middle = numpy.mean(z_limits)
+
+  # The plot bounding box is a sphere in the sense of the infinity
+  # norm, hence I call half the max range the plot radius.
+  plot_radius = 0.5*max([x_range, y_range, z_range])
+
+  ax.set_xlim3d([x_middle - plot_radius, x_middle + plot_radius])
+  ax.set_ylim3d([y_middle - plot_radius, y_middle + plot_radius])
+  ax.set_zlim3d([z_middle - plot_radius, z_middle + plot_radius])
+
+def plot_points(pts, c='b', clabel=None):
+  #3D projection
+  fig = plt.figure(1,figsize=(10,4))
   ax = fig.add_subplot(111, projection='3d')
-  ax.scatter(pts[:,0], pts[:,1], pts[:,2])
+  ax.view_init(elev=30.0, azim=130.0)
+  #ax.set_aspect('equal')
+  s_plot = ax.scatter(xs=pts[:,0], ys=pts[:,1], zs=pts[:,2], c=c, edgecolor='none', alpha=0.7, s=50)
+  if clabel is not None:
+    fig.colorbar(s_plot, label=clabel)
+  
   ax.set_xlabel('X(m)')
   ax.set_ylabel('Y(m)')
   ax.set_zlabel('Z(m)')
+  ax.set_zlim3d([-0.05,0.55])
+  #scaling = numpy.array([getattr(ax, 'get_{}lim'.format(dim))() for dim in 'xyz'])
+  #ax.auto_scale_xyz(*[[numpy.min(scaling), numpy.max(scaling)]]*3)
+  #set_axes_equal(ax)
+
+  #XY Projection
+  fig = plt.figure(2,figsize=(10,8))
+  plt.scatter(pts[:,0], pts[:,1], c=c, edgecolor='none', alpha=0.7, s=50)
+  plt.xlabel('X(m)')
+  plt.ylabel('Y(m)')
+  plt.xlim([-0.5, 4.5])
+  plt.ylim([-1.5,3.5])
+  plt.gca().grid(True) 
+  plt.axis('equal')
+  
+  #YZ Projection
+  fig = plt.figure(3,figsize=(10,4))
+  plt.scatter(pts[:,1], pts[:,2], c=c, edgecolor='none', alpha=0.7, s=50)
+  plt.xlabel('Y(m)')
+  plt.ylabel('Z(m)')
+  plt.xlim([-1.5, 3.5])
+  plt.ylim([-0.5,0.55])
+  plt.gca().grid(True)
+  plt.axis('equal')
+
+  #XZ Projection
+  fig = plt.figure(4,figsize=(10,4))
+  plt.scatter(pts[:,0], pts[:,2], c=c, edgecolor='none', alpha=0.7, s=50)
+  plt.xlabel('X(m)')
+  plt.ylabel('Z(m)')
+  plt.xlim([-0.5, 4.5])
+  plt.ylim([-0.5,0.55])
+  plt.gca().grid(True) 
+  plt.axis('equal')
+  
   plt.show()
 
 def pose_to_matrix(pose):
