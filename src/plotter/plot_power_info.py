@@ -18,7 +18,7 @@ def save_power_info(power, info, clock, filename='power_info.pdf'):
   power_info_interp = interp_power(power, info, clock)
   plt.scatter(power_info_interp, info[:,1], c='k', marker='.')
   plt.xlabel('Energy (J)')
-  plt.ylabel('Information Metric (Robot Volume Multiples)')
+  plt.ylabel('Information Metric $h_v$ (Robot Volume Multiples)')
   plt.ylim([0,40000])
   plt.grid(True)
   plt.savefig(filename)
